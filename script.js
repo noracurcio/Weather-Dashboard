@@ -67,6 +67,11 @@ function currentWeather(citySearch){
 lon = response.coord.lon
 lat = response.coord.lat
 
+$("img").empty()
+        card.empty()
+        cardBody.empty()
+        $("#today").empty()
+
 title.append(img)
 cardBody.append(title, temp, humidity, wind)
 card.append(cardBody)
