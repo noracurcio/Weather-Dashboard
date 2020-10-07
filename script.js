@@ -5,9 +5,6 @@ var lon = 0;
 var lat = 0;
 
 var citiesStorage = JSON.parse(localStorage.getItem("citiesStorage")) || []
-// if (citiesStorage !== null){
-//     citiesArr = JSON.parse(citiesStorage);
-// }
 
 if( citiesStorage.length > 0 ){
     console.log("hello")
@@ -23,11 +20,9 @@ $("#search-button").on("click", function(){
     var citySearch = $("#search-value").val();
     $("#search-value").val("");
     currentWeather(citySearch);
-    forecast(citySearch);
-    // createButtons(citySearch);
+    
+    
 })
-
-
 
 
 function createButtons(citySearch){
@@ -36,24 +31,23 @@ function createButtons(citySearch){
     var li = $("<li>").addClass("list-group-item list-group-item-action").text(citySearch)
     $(".cityHistory").append(li);
 
-    // if(citiesArr){
-    //     for (i=0; i < citiesArr.length; i++){
-    //         var newButton = $("<button>");
-    //         newButton.text(citiesArr[i])
-    //         $(".cityHistory").append(newButton)
-    //     }
-    // }
+
 }
 
 $(".cityHistory").on("click", "li", function(){
+    console.log($(this).text())
     currentWeather($(this).text())
+    
+    
+    
+    
 })
 
 
 function currentWeather(citySearch){
 
     $.ajax({
-        url: "https://api.openweathermap.org/data/2.5/weather?q=" + citySearch + "&appid=" + APIKey,
+        url: "https://api.openweathermap.org/data/2.5/weather?q=" + citySearch + "&appid=" + APIKey+"&units=imperial",
         method: "GET"
     }).then(function(response) {
     console.log(response)
@@ -61,7 +55,9 @@ function currentWeather(citySearch){
         citiesStorage.push(citySearch)
         localStorage.setItem("citiesStorage", JSON.stringify(citiesStorage))
         createButtons(citySearch);
+
     }
+
     var title = $("<h3>").addClass("card-title").text(response.name + "(" + new Date().toLocaleDateString() + ")")
     var card = $("<div>").addClass("card")
     var temp = $("<p>").addClass("card-text").text("Temperature: " + response.main.temp)
@@ -69,6 +65,8 @@ function currentWeather(citySearch){
     var wind = $("<p>").addClass("card-text").text("Windspeed: " + response.wind.speed + "mph" )
     var cardBody = $("<div>").addClass("card-body")
     var img = $("<img>").attr("src", "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
+
+    forecast(citySearch)
 
     lon = response.coord.lon
     lat = response.coord.lat
@@ -94,6 +92,8 @@ function currentWeather(citySearch){
     
     var uvIndex = $("<p>").addClass("card-text").text("UV Index: " + response.value)
     cardBody.append(uvIndex)
+
+    
 });
 })
 }
@@ -109,7 +109,7 @@ function forecast(citySearch){
 
         for(var i = 0; i < response.list.length; i++){
             if (response.list[i].dt_txt.indexOf("15:00:00") !== -1){
-                var column = $("<div>").addClass("col-md-2");
+                var column = $("#forecast").addClass("col-md-8 margin-left")
                 var card = $("<div>").addClass("card bg-primary text-white")
                 var bodyDiv = $("<div>").addClass("card-body")
                 var title = $("<h5>").addClass("card-title").text(new Date(response.list[i].dt_txt).toLocaleDateString())
@@ -119,14 +119,16 @@ function forecast(citySearch){
 
                 column.append(card.append(bodyDiv.append(title, img, temp, humidity)))
                 $("#forecast").append(column)
+
+                
             }
 
         }
     })
 }
 
-forecast();
-currentWeather();
+// forecast();
+// currentWeather();
 
 
 
