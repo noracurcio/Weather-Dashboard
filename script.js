@@ -4,58 +4,64 @@ var APIKey = "c845459fa98a4e99f601fe9683c800bd"
 var lon = 0;
 var lat = 0;
 
+var citiesStorage = JSON.parse(localStorage.getItem("citiesStorage")) || []
+// if (citiesStorage !== null){
+//     citiesArr = JSON.parse(citiesStorage);
+// }
+
+if( citiesStorage.length > 0 ){
+    console.log("hello")
+    currentWeather(citiesStorage[citiesStorage.length-1])
+}
+
+for(i=0; i< citiesStorage.length; i++){
+    createButtons(citiesStorage[i])
+}
+
 
 $("#search-button").on("click", function(){
     var citySearch = $("#search-value").val();
     $("#search-value").val("");
     currentWeather(citySearch);
     forecast(citySearch);
+    // createButtons(citySearch);
 })
 
 
-function renderHistory() {
 
-    var secondDiv = $("<div>").addClass("buttons-view")
 
-    // Deleting the movies prior to adding new movies
-    // (this is necessary otherwise we will have repeat buttons)
-    $("#buttons-view").empty();
+function createButtons(citySearch){
 
-    // Looping through the array of movies
-   
 
-      // Then dynamicaly generating buttons for each movie in the array
-      // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-      var createButton = $("<button>");
-      // Adding a class
-      createButton.addClass("history");
-      // Added a data-attribute
-      
-      // Provided the initial button text
-      createButton.text().val(citySearch);
-      // Added the button to the HTML
-      var thirdDiv = $("#buttons-view").append(createButton);
+    var li = $("<li>").addClass("list-group-item list-group-item-action").text(citySearch)
+    $(".cityHistory").append(li);
 
-      var bodyTag = secondDiv.append(thirdDiv);
+    // if(citiesArr){
+    //     for (i=0; i < citiesArr.length; i++){
+    //         var newButton = $("<button>");
+    //         newButton.text(citiesArr[i])
+    //         $(".cityHistory").append(newButton)
+    //     }
+    // }
+}
 
-        $("body").append(bodyTag)
-
-      
-
-      
-    }
-  
-
+$(".cityHistory").on("click", "li", function(){
+    currentWeather($(this).text())
+})
 
 
 function currentWeather(citySearch){
 
     $.ajax({
-        url: "https://api.openweathermap.org/data/2.5/weather?q=" + citySearch + "&appid=" + APIKey,
+        url: "https://api.openweathermap.org/data/2.5/weather?q=" + citySearch + "&appid=" + APIKey+"&units=imperial",
         method: "GET"
     }).then(function(response) {
     console.log(response)
-
+    if(citiesStorage.indexOf(citySearch)===-1){
+        citiesStorage.push(citySearch)
+        localStorage.setItem("citiesStorage", JSON.stringify(citiesStorage))
+        createButtons(citySearch);
+    }
     var title = $("<h3>").addClass("card-title").text(response.name + "(" + new Date().toLocaleDateString() + ")")
     var card = $("<div>").addClass("card")
     var temp = $("<p>").addClass("card-text").text("Temperature: " + response.main.temp)
@@ -64,40 +70,38 @@ function currentWeather(citySearch){
     var cardBody = $("<div>").addClass("card-body")
     var img = $("<img>").attr("src", "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
 
-lon = response.coord.lon
-lat = response.coord.lat
+    lon = response.coord.lon
+    lat = response.coord.lat
 
-$("img").empty()
-        card.empty()
-        cardBody.empty()
-        $("#today").empty()
+// This will clear the input so only one city shows up 
+    $("img").empty()
+    card.empty()
+    cardBody.empty()
+    $("#today").empty()
 
-title.append(img)
-cardBody.append(title, temp, humidity, wind)
-card.append(cardBody)
+//This will make the new city information appear
+    title.append(img)
+    cardBody.append(title, temp, humidity, wind)
+    card.append(cardBody)
+    $("#today").append(card)
 
-$("#today").append(card)
-
-$.ajax({
-    url: "http://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey,
-    method: "GET"
-  }).then(function(response) {
-      console.log(response)
-
+//Ajax call to get the latitude and longitutde
+    $.ajax({
+        url: "http://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey+"&units=imperial",
+        method: "GET"
+    }).then(function(response) {
+    console.log(response)
+    
     var uvIndex = $("<p>").addClass("card-text").text("UV Index: " + response.value)
     cardBody.append(uvIndex)
-
-
-
-
-
-  });
+});
 })
 }
 
+//This function will display the forcast for the current city 
 function forecast(citySearch){
     $.ajax({
-        url: "http://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&appid=" + APIKey,
+        url: "http://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&appid=" + APIKey+"&units=imperial",
         method: "GET"
     }).then(function(response){
         console.log(response);
@@ -121,8 +125,8 @@ function forecast(citySearch){
     })
 }
 
-forecast();
-currentWeather();
+// forecast();
+// currentWeather();
 
 
 
@@ -134,5 +138,4 @@ currentWeather();
 
 
 
-//var isAfter = day.js().isAfter('2018-04-04T16:00:00.0002', 'minute')
 
