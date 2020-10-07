@@ -1,16 +1,21 @@
 # Weather-Dashboard
 # **Description**
-This application 
+This application allows the user to enter any city in the search bar and will be provided with the current weather, and the weather forecast for the next 5 days for the specific city. Once that city has been searched for, it remains in the history of the page. When each city is then clicked from the page, the weather for that city reappears. 
+
 # **Installation**
 N/A
+
 # **Usage**
-After answering a series of prompts to determine criteria, the website will then generate a secure password that is up to the determined specifications. 
+The user can retriveve the temperature, humidity, windspeed and UV index as well as a 5 day forecast for every city in the world. This application will save the history of past searched cities by the user and they can be easily revisited when clicked. 
+
 # **Technologies Used**
-In this project, only the Javascript was manipulated. 
+In this project, the javascript, css, and html files were manipulated with technologies including JQuery and the outsourcing of an API. 
+
 # **Problems Faced**
-It was difficult for me to work though the for loops to get them to accurately pull the information needed and sting it together. Another problem faced was that the password wasn't generating an answer longer than four characters long, which I narrowed down to the .length attribute in my for loop. I added "for (var i=0; i < options.confirmLength; i++) {
-    result.push(randomFunction(possibleChar));" and it fixed the issue with the short arrays and a random selection issue. 
+My biggest obstacle in this project was getting my 5 day forecast to reflect the city that was selected with the button click of a city history. 
+
 # **Credits**
 This website was created by me, but could only have been done with the help of my instructor, TA’s, my tutor, and classmates. In that way, it was a collaborative effort. 
+
 # **License**
 N/A
