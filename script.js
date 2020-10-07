@@ -53,7 +53,7 @@ $(".cityHistory").on("click", "li", function(){
 function currentWeather(citySearch){
 
     $.ajax({
-        url: "https://api.openweathermap.org/data/2.5/weather?q=" + citySearch + "&appid=" + APIKey+"&units=imperial",
+        url: "https://api.openweathermap.org/data/2.5/weather?q=" + citySearch + "&appid=" + APIKey,
         method: "GET"
     }).then(function(response) {
     console.log(response)
@@ -87,7 +87,7 @@ function currentWeather(citySearch){
 
 //Ajax call to get the latitude and longitutde
     $.ajax({
-        url: "http://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey+"&units=imperial",
+        url: "http://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey,
         method: "GET"
     }).then(function(response) {
     console.log(response)
@@ -125,8 +125,8 @@ function forecast(citySearch){
     })
 }
 
-// forecast();
-// currentWeather();
+forecast();
+currentWeather();
 
 
 
