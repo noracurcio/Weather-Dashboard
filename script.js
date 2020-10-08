@@ -64,7 +64,7 @@ function currentWeather(citySearch){
     var humidity = $("<p>").addClass("card-text").text("Humidity: " + response.main.humidity + "%")
     var wind = $("<p>").addClass("card-text").text("Windspeed: " + response.wind.speed + "mph" )
     var cardBody = $("<div>").addClass("card-body")
-    var img = $("<img>").attr("src", "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
+    var img = $("<img>").attr("src", "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
 
     forecast(citySearch)
 
@@ -85,7 +85,7 @@ function currentWeather(citySearch){
 
 //Ajax call to get the latitude and longitutde
     $.ajax({
-        url: "http://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey,
+        url: "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey,
         method: "GET"
     }).then(function(response) {
     console.log(response)
@@ -101,7 +101,7 @@ function currentWeather(citySearch){
 //This function will display the forcast for the current city 
 function forecast(citySearch){
     $.ajax({
-        url: "http://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&appid=" + APIKey+"&units=imperial",
+        url: "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&appid=" + APIKey+"&units=imperial",
         method: "GET"
     }).then(function(response){
         console.log(response);
@@ -113,7 +113,7 @@ function forecast(citySearch){
                 var card = $("<div>").addClass("card bg-primary text-white")
                 var bodyDiv = $("<div>").addClass("card-body")
                 var title = $("<h5>").addClass("card-title").text(new Date(response.list[i].dt_txt).toLocaleDateString())
-                var img = $("<img>").attr("src", "http://openweathermap.org/img/w/" + response.list[i].weather[0].icon + ".png")
+                var img = $("<img>").attr("src", "https://openweathermap.org/img/w/" + response.list[i].weather[0].icon + ".png")
                 var temp = $("<p>").addClass("card-text").text("Temperature: " + response.list[i].main.temp)
                 var humidity = $("<p>").addClass("card-text").text("Humidity: " + response.list[i].main.humidity)
 
